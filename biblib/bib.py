@@ -10,7 +10,11 @@ __all__ = 'Parser Entry FieldError resolve_crossrefs'.split()
 
 import sys
 import re
-import collections
+from collections import OrderedDict, Counter
+try:
+    from collections.abc import Iterable 
+except ImportError:
+    from collections import Iterable
 import textwrap
 
 from . import messages
@@ -42,7 +46,7 @@ class Parser:
         """
 
         self.__log, self.__errors = [], False
-        self.__entries = collections.OrderedDict()
+        self.__entries = OrderedDict()
 
         if month_style == 'full':
             self.__macros = {'jan': 'January',   'feb': 'February',
@@ -94,7 +98,7 @@ class Parser:
         if isinstance(str_or_fp_or_iter, str):
             self.__data = str_or_fp_or_iter
             fname = name or '<string>'
-        elif isinstance(str_or_fp_or_iter, collections.Iterable) and \
+        elif isinstance(str_or_fp_or_iter, Iterable) and \
              not hasattr(str_or_fp_or_iter, 'read'):
             for obj in str_or_fp_or_iter:
                 with recoverer:
@@ -315,7 +319,7 @@ class FieldError(KeyError):
 
 MONTH_MACROS = 'jan feb mar apr may jun jul aug sep oct nov dec'.split()
 
-class Entry(collections.OrderedDict):
+class Entry(OrderedDict):
     """An entry in a BibTeX database.
 
     This is an ordered dictionary of fields, plus some additional
@@ -466,7 +470,7 @@ def resolve_crossrefs(db, min_crossrefs=None):
     InputError.
     """
     if min_crossrefs is not None:
-        counts = collections.Counter(entry['crossref'].lower()
+        counts = Counter(entry['crossref'].lower()
                                      for entry in db.values()
                                      if 'crossref' in entry)
     else:
@@ -474,7 +478,7 @@ def resolve_crossrefs(db, min_crossrefs=None):
 
     key_idx = {k: i for i, k in enumerate(db)}
     recoverer = messages.InputErrorRecoverer()
-    ndb = collections.OrderedDict()
+    ndb = OrderedDict()
     for entry_idx, (key, entry) in enumerate(db.items()):
         crossref = entry.get('crossref')
         if crossref is None:
