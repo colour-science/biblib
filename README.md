@@ -50,7 +50,15 @@ before importing it.
 
 Biblib can also be installed system-wide with
 
-    python3 setup.py install
+    python3 -m pip install biblib-simple
+
+
+Development
+-----------
+
+Build source and wheel distributions with `python3 -m build`, and run the
+parser and algorithm tests with `python3 -m unittest biblib.test`. CI tests
+Python 3.13, 3.14, and 3.15 on Linux, macOS, and Windows.
 
 
 Examples

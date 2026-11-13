@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='biblib-simple',
-    version='0.1.2',
+    version='0.1.3',
     description='Simple, correct BibTeX parser and algorithms',
     url='https://github.com/colour-science/biblib',
     author='Austin Clements',
